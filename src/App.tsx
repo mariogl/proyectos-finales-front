@@ -1,6 +1,6 @@
 import Navigation from "./components/Navigation/Navigation";
 
-function App() {
+const App = () => {
   return (
     <>
       <header>
@@ -12,6 +12,6 @@ function App() {
       </main>
     </>
   );
-}
+};
 
 export default App;

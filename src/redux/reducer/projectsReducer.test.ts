@@ -32,4 +32,12 @@ describe("Given a projectsReducer function", () => {
       expect(newState).toEqual(initialProjects);
     });
   });
+
+  describe("When it receives nothing", () => {
+    test("Then it should return an empty list", () => {
+      const newState = projectsReducer();
+
+      expect(newState).toEqual([]);
+    });
+  });
 });
