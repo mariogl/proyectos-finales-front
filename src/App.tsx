@@ -1,3 +1,4 @@
+import ProjectsList from "./components/ProjectsList/ProjectsList";
 import Navigation from "./components/Navigation/Navigation";
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
       </header>
       <main>
         <h2>Proyectos</h2>
+        <ProjectsList />
       </main>
     </>
   );
