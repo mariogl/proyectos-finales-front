@@ -1,8 +1,8 @@
 import Project from "./project";
 
-interface LoadProjectsAction {
+export interface Action {
   type: string;
+}
+export interface LoadProjectsAction extends Action {
   projects: Project[];
 }
-
-export default LoadProjectsAction;
