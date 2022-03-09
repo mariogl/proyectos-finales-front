@@ -1,4 +1,4 @@
-import LoadProjectsAction from "../../types/actions";
+import { LoadProjectsAction } from "../../types/actions";
 import Project from "../../types/project";
 import actionTypes from "./actionTypes";
 import loadProjectsAction from "./projectsActionCreators";
