@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import TimeAgo from "javascript-time-ago";
 import es from "javascript-time-ago/locale/es.json";
-
+import "bootstrap/dist/css/bootstrap.min.css";
 import store from "./redux/store";
 
 TimeAgo.addDefaultLocale(es);
