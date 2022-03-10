@@ -13,10 +13,12 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.13",
     "axios": "^0.26.0",
+    "bootstrap": "^5.1.3",
     "fishery": "^2.2.2",
     "javascript-time-ago": "^2.3.13",
     "msw": "^0.39.1",
     "react": "^17.0.2",
+    "react-bootstrap": "^2.2.0",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",
@@ -24,6 +26,7 @@
     "react-time-ago": "^7.1.9",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
+    "styled-components": "^5.3.3",
     "typescript": "^4.6.2",
     "web-vitals": "^2.1.4"
   },
@@ -62,6 +65,7 @@
     ]
   },
   "devDependencies": {
+    "@types/styled-components": "^5.1.24",
     "bson-objectid": "^2.0.2",
     "husky": "^7.0.0"
   }

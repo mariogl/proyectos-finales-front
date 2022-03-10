@@ -1,8 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import ReactTimeAgo from "react-time-ago";
 import Project from "../../types/project";
 
+const StyledTitle = styled.h3`
+  font-size: 14px;
+`;
 interface ProjectCardProps {
   project: Project;
 }
@@ -10,6 +14,7 @@ interface ProjectCardProps {
 const ProjectCard = ({
   project: { id, name, repo, tutor, student },
 }: ProjectCardProps): JSX.Element => {
+  console.log(id, name);
   const githubApiUrl = process.env.REACT_APP_GITHUB_API as string;
 
   const [infoRepos, setInfoRepos] = useState<{
@@ -34,10 +39,10 @@ const ProjectCard = ({
   }, [githubApiUrl, repo.back, repo.front]);
 
   return (
-    <div className="project-card">
-      <h3>
+    <article className="project-card">
+      <StyledTitle className="project-title">
         {name} - {student}
-      </h3>
+      </StyledTitle>
       ({tutor.name})<h4>Front</h4>
       <p>
         Último commit:{" "}
@@ -55,7 +60,7 @@ const ProjectCard = ({
           <ReactTimeAgo date={new Date(infoRepos.back.pushed_at)} locale="es" />
         )}
       </p>
-    </div>
+    </article>
   );
 };
 

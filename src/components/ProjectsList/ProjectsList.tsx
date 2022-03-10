@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { loadProjectsThunk } from "../../redux/thunks/projectsThunks";
 import Project from "../../types/project";
@@ -14,13 +15,13 @@ const ProjectsList = (): JSX.Element => {
   }, [dispatch]);
 
   return (
-    <ul>
+    <Row as="ul" className="list-unstyled">
       {projects.map((project: Project) => (
-        <li key={project.id}>
+        <Col as="li" xs={3} sm={4} key={project.id}>
           <ProjectCard project={project} />
-        </li>
+        </Col>
       ))}
-    </ul>
+    </Row>
   );
 };
 
