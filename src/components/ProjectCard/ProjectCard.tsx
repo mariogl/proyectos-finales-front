@@ -8,7 +8,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({
-  project: { id, name, repo, student },
+  project: { id, name, repo, tutor, student },
 }: ProjectCardProps): JSX.Element => {
   const githubApiUrl = process.env.REACT_APP_GITHUB_API as string;
 
@@ -35,8 +35,10 @@ const ProjectCard = ({
 
   return (
     <div className="project-card">
-      <h3>{name}</h3> <span className="student">{student}</span>
-      <h4>Front</h4>
+      <h3>
+        {name} - {student}
+      </h3>
+      ({tutor.name})<h4>Front</h4>
       <p>
         Último commit:{" "}
         {infoRepos.front && (

@@ -15,6 +15,10 @@ const projectsFactory = Factory.define<Project>(() => ({
     front: "",
     back: "",
   },
+  tutor: {
+    id: mongoid(),
+    name: faker.name.firstName(),
+  },
 }));
 
 export const randomProject = (): Project => projectsFactory.build();
