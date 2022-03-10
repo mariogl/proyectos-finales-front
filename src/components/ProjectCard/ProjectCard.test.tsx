@@ -8,10 +8,10 @@ describe("Given a ProjectCard component", () => {
     test("Then it should display its name and student", async () => {
       const project = randomProject();
 
-      render(<ProjectCard project={project} />);
+      render(<ProjectCard project={project} backgroundColor="#000" />);
 
       const name = await screen.findByRole("heading", {
-        name: project.name + " - " + project.student,
+        name: project.name,
       });
 
       expect(name).toBeInTheDocument();
