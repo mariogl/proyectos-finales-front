@@ -1,7 +1,10 @@
 import Project from "./project";
 
 interface RootState {
-  projects: Project[];
+  projects: {
+    list: Project[];
+    filterBy: string;
+  };
 }
 
 export default RootState;

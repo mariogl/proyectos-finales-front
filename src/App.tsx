@@ -12,9 +12,6 @@ const App = () => {
         </Row>
         <Row as="main">
           <Col xs={12}>
-            <h2>Proyectos</h2>
-          </Col>
-          <Col xs={12}>
             <ProjectsList />
           </Col>
         </Row>

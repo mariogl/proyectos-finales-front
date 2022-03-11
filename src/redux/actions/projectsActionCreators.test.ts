@@ -3,7 +3,7 @@ import { randomProjects } from "../../mocks/projects";
 import { LoadProjectsAction } from "../../types/actions";
 import Project from "../../types/project";
 import actionTypes from "./actionTypes";
-import loadProjectsAction from "./projectsActionCreators";
+import { loadProjectsAction } from "./projectsActionCreators";
 
 describe("Given a loadProjectsAction function", () => {
   describe("When it receives a list of projects", () => {
