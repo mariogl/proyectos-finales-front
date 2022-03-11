@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ReactTimeAgo from "react-time-ago";
 import Project from "../../types/project";
+import trelloLogo from "../../img/trello.svg";
 import { Octokit } from "@octokit/rest";
 
 const StyledArticle = styled.article<{ backgroundColor: string }>`
@@ -33,6 +34,13 @@ const StyledTutor = styled.span`
   width: 20px;
   text-align: center;
 `;
+
+const StyledLogo = styled.span`
+  position: absolute;
+  right: 10px;
+  top: 40px;
+`;
+
 interface ProjectCardProps {
   project: Project;
   backgroundColor: string;
@@ -41,7 +49,7 @@ interface ProjectCardProps {
 const octokit = new Octokit({ auth: process.env.REACT_APP_GITHUB_TOKEN });
 
 const ProjectCard = ({
-  project: { id, name, repo, tutor, student },
+  project: { id, name, repo, tutor, student, trello },
   backgroundColor,
 }: ProjectCardProps): JSX.Element => {
   const [infoRepoFront, setInfoRepoFront] = useState<any>(null);
@@ -135,6 +143,11 @@ const ProjectCard = ({
           />
         )}
       </p>
+      <StyledLogo>
+        <a href={trello} target="_blank" rel="noreferrer">
+          <img src={trelloLogo} alt="Trello" height="20" />
+        </a>
+      </StyledLogo>
       <StyledTutor>{tutor.name.charAt(0).toUpperCase()}</StyledTutor>
     </StyledArticle>
   );
