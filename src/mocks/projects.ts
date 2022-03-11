@@ -11,6 +11,7 @@ const projectFactory = Factory.define<Project>(() => ({
   id: mongoId(),
   name: faker.name.findName(),
   student: faker.name.firstName(),
+  trello: faker.internet.url(),
   repo: {
     back: faker.internet.url(),
     front: faker.internet.url(),
