@@ -2,7 +2,7 @@ import axios from "axios";
 import { Dispatch } from "react";
 import { LoadProjectsAction } from "../../types/actions";
 import Project from "../../types/project";
-import loadProjectsAction from "../actions/projectsActionCreators";
+import { loadProjectsAction } from "../actions/projectsActionCreators";
 
 export const loadProjectsThunk =
   () => async (dispatch: Dispatch<LoadProjectsAction>) => {

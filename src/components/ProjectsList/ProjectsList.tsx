@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { ProjectsState } from "../../redux/reducer/projectsReducer";
 import { loadProjectsThunk } from "../../redux/thunks/projectsThunks";
 import Project from "../../types/project";
 import RootState from "../../types/store";
@@ -22,7 +23,19 @@ const colors = [
 
 const ProjectsList = (): JSX.Element => {
   const dispatch = useDispatch();
-  const projects: Project[] = useSelector((state: RootState) => state.projects);
+  const { list: projectsList, filterBy }: ProjectsState = useSelector(
+    (state: RootState) => state.projects
+  );
+
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    setProjects(
+      filterBy
+        ? projectsList.filter((project) => project.tutor.name === filterBy)
+        : projectsList
+    );
+  }, [filterBy, projectsList]);
 
   useEffect(() => {
     dispatch(loadProjectsThunk());

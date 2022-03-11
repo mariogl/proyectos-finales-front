@@ -6,3 +6,7 @@ export interface Action {
 export interface LoadProjectsAction extends Action {
   projects: Project[];
 }
+
+export interface FilterProjectsAction extends Action {
+  filter: string;
+}
