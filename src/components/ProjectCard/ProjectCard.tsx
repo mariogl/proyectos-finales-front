@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ReactTimeAgo from "react-time-ago";
 import Project from "../../types/project";
-import { Octokit } from "octokit";
+import { Octokit } from "@octokit/rest";
 
 const StyledArticle = styled.article<{ backgroundColor: string }>`
   background-color: ${(props) => props.backgroundColor};
@@ -10,6 +10,9 @@ const StyledArticle = styled.article<{ backgroundColor: string }>`
   padding: 10px;
   font-size: 12px;
   position: relative;
+  .danger {
+    background-color: red;
+  }
 `;
 
 const StyledStudent = styled.span`
@@ -41,13 +44,13 @@ const ProjectCard = ({
   project: { id, name, repo, tutor, student },
   backgroundColor,
 }: ProjectCardProps): JSX.Element => {
-  const [infoRepoFront, setInfoRepoFront] = useState<any>();
-  const [infoRepoBack, setInfoRepoBack] = useState<any>();
+  const [infoRepoFront, setInfoRepoFront] = useState<any>(null);
+  const [infoRepoBack, setInfoRepoBack] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
       const lastCommitFrontPromise = octokit.request(
-        `GET /repos/{owner}/{repo}/commits`,
+        "GET /repos/{owner}/{repo}/commits",
         {
           owner: process.env.REACT_APP_GITHUB_OWNER as string,
           repo: repo.front,
@@ -55,14 +58,21 @@ const ProjectCard = ({
         }
       );
       const lastCommitBackPromise = octokit.request(
-        `GET /repos/{owner}/{repo}/commits`,
+        "GET /repos/{owner}/{repo}/commits",
         {
           owner: process.env.REACT_APP_GITHUB_OWNER as string,
           repo: repo.back,
           per_page: 1,
         }
       );
-
+      const lastPullRequestFrontPromise = octokit.request(
+        "GET /repos/{owner}/{repo}/pulls",
+        {
+          owner: process.env.REACT_APP_GITHUB_OWNER as string,
+          repo: repo.front,
+          per_page: 1,
+        }
+      );
       const [
         {
           data: [repoFront],
@@ -70,9 +80,16 @@ const ProjectCard = ({
         {
           data: [repoBack],
         },
-      ] = await Promise.all([lastCommitFrontPromise, lastCommitBackPromise]);
-      setInfoRepoFront(repoFront);
-      setInfoRepoBack(repoBack);
+        {
+          data: [pullRequestsFront],
+        },
+      ] = await Promise.all([
+        lastCommitFrontPromise,
+        lastCommitBackPromise,
+        lastPullRequestFrontPromise,
+      ]);
+      setInfoRepoFront({ commits: repoFront, pullRequests: pullRequestsFront });
+      setInfoRepoBack({ commits: repoBack, pullRequests: pullRequestsFront });
     })();
   }, [repo.back, repo.front]);
 
@@ -83,19 +100,37 @@ const ProjectCard = ({
       <h4>Front</h4>
       <p>
         Último commit:{" "}
-        {infoRepoFront && (
+        {infoRepoFront && infoRepoFront.commits && (
           <ReactTimeAgo
-            date={new Date(infoRepoFront.commit.author?.date)}
+            date={new Date(infoRepoFront.commits.commit.author?.date)}
             locale="es"
           />
         )}
+      </p>
+      <p>
+        Última PR abierta:{" "}
+        {infoRepoFront &&
+          infoRepoFront.pullRequests &&
+          infoRepoFront.pullRequests.updated_at && (
+            <ReactTimeAgo
+              date={new Date(infoRepoFront.pullRequests.updated_at)}
+              locale="es"
+              className={`${
+                new Date().getTime() -
+                  new Date(infoRepoFront.pullRequests.updated_at).getTime() >
+                60 * 60 * 1000
+                  ? "danger"
+                  : ""
+              }`}
+            />
+          )}
       </p>
       <h4>Back</h4>
       <p>
         Último commit:{" "}
         {infoRepoBack && (
           <ReactTimeAgo
-            date={new Date(infoRepoBack.commit.author?.date)}
+            date={new Date(infoRepoBack.commits.commit.author?.date)}
             locale="es"
           />
         )}
