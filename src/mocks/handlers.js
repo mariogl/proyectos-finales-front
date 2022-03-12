@@ -16,4 +16,13 @@ export const handlers = [
       })
     )
   ),
+  rest.get(`${process.env.REACT_APP_API_URL}sonardata`, (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.json({
+        codeSmells: "0",
+        coverage: "0",
+      })
+    )
+  ),
 ];

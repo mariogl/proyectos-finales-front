@@ -12,6 +12,7 @@ const projectFactory = Factory.define<Project>(() => ({
   name: faker.name.findName(),
   student: faker.name.firstName(),
   trello: faker.internet.url(),
+  sonarqubeKey: faker.name.firstName(),
   repo: {
     back: faker.internet.url(),
     front: faker.internet.url(),

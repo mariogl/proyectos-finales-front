@@ -4,6 +4,7 @@ import ReactTimeAgo from "react-time-ago";
 import Project from "../../types/project";
 import trelloLogo from "../../img/trello.svg";
 import { Octokit } from "@octokit/rest";
+import axios from "axios";
 
 const StyledArticle = styled.article<{ backgroundColor: string }>`
   background-color: ${(props) => props.backgroundColor};
@@ -49,11 +50,12 @@ interface ProjectCardProps {
 const octokit = new Octokit({ auth: process.env.REACT_APP_GITHUB_TOKEN });
 
 const ProjectCard = ({
-  project: { id, name, repo, tutor, student, trello },
+  project: { id, name, repo, tutor, student, trello, sonarqubeKey },
   backgroundColor,
 }: ProjectCardProps): JSX.Element => {
   const [infoRepoFront, setInfoRepoFront] = useState<any>(null);
   const [infoRepoBack, setInfoRepoBack] = useState<any>(null);
+  const [infoSonarFront, setInfoSonarFront] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
@@ -101,6 +103,24 @@ const ProjectCard = ({
     })();
   }, [repo.back, repo.front]);
 
+  useEffect(() => {
+    if (sonarqubeKey) {
+      (async () => {
+        const {
+          data: { codeSmells, coverage },
+        } = await axios.get(
+          `${process.env.REACT_APP_API_URL}sonardata?projectKey=${sonarqubeKey}`,
+          {
+            headers: {
+              authorization: `Bearer ${process.env.REACT_APP_TEMPORARY_JWT}`,
+            },
+          }
+        );
+        setInfoSonarFront({ codeSmells: +codeSmells, coverage: +coverage });
+      })();
+    }
+  }, [sonarqubeKey]);
+
   return (
     <StyledArticle backgroundColor={backgroundColor}>
       <StyledStudent>{student}</StyledStudent>
@@ -133,6 +153,12 @@ const ProjectCard = ({
             />
           )}
       </p>
+      {infoSonarFront && (
+        <>
+          <p>Code smells: {infoSonarFront.codeSmells}</p>
+          <p>Coverage: {infoSonarFront.coverage}%</p>
+        </>
+      )}
       <h4>Back</h4>
       <p>
         Último commit:{" "}

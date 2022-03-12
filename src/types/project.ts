@@ -3,6 +3,7 @@ interface Project {
   name: string;
   student: string;
   trello: string;
+  sonarqubeKey: string;
   tutor: {
     id: string;
     name: string;
