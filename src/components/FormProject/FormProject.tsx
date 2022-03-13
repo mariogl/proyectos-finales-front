@@ -1,7 +1,10 @@
 import axios from "axios";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { blankProject } from "../../factories/project";
+import { createProjectThunk } from "../../redux/thunks/projectsThunks";
 import Project from "../../types/project";
 
 interface Tutor {
@@ -14,6 +17,8 @@ const FormProject = (): JSX.Element => {
   const initialData: Project = blankProject();
 
   const [formData, setFormData] = useState<Project>(initialData);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -51,6 +56,18 @@ const FormProject = (): JSX.Element => {
 
   const submitForm = (event: FormEvent) => {
     event.preventDefault();
+    if (validateData()) {
+      dispatch(createProjectThunk(formData));
+      navigate("/projects");
+    }
+  };
+
+  const validateData = (): boolean => {
+    return !(
+      Object.values(formData).slice(1).includes("") ||
+      Object.values(formData.repo).includes("") ||
+      formData.tutor.id === ""
+    );
   };
 
   return (
@@ -148,7 +165,7 @@ const FormProject = (): JSX.Element => {
       </Row>
       <Row>
         <Col xs={12}>
-          <Button type="submit" variant="dark">
+          <Button type="submit" variant="dark" disabled={!validateData()}>
             Create
           </Button>
         </Col>
