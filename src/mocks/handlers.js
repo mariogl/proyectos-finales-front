@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import { randomProjects } from "./projects";
+import { randomProjects } from "../factories/project";
 
 export const handlers = [
   rest.get("https://api.github.com/repos/*", (req, res, ctx) => {

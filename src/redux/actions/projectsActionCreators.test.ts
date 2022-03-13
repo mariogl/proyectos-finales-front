@@ -1,5 +1,5 @@
 import { act } from "react-dom/test-utils";
-import { randomProjects } from "../../mocks/projects";
+import { randomProjects } from "../../factories/project";
 import { LoadProjectsAction } from "../../types/actions";
 import Project from "../../types/project";
 import actionTypes from "./actionTypes";

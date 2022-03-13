@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { randomProject } from "../../mocks/projects";
+import { randomProject } from "../../factories/project";
 import ProjectCard from "./ProjectCard";
 
 describe("Given a ProjectCard component", () => {

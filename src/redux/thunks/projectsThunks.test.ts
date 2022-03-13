@@ -1,5 +1,5 @@
 import axios from "axios";
-import { randomProjects } from "../../mocks/projects";
+import { randomProjects } from "../../factories/project";
 import Project from "../../types/project";
 import { loadProjectsThunk } from "./projectsThunks";
 
