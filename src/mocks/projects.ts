@@ -10,6 +10,7 @@ const mongoId = () =>
 const projectFactory = Factory.define<Project>(() => ({
   id: mongoId(),
   name: faker.name.findName(),
+  folder: faker.name.findName(),
   student: faker.name.firstName(),
   trello: faker.internet.url(),
   sonarqubeKey: faker.name.firstName(),

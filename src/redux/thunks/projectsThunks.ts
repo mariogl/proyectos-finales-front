@@ -6,7 +6,7 @@ import { loadProjectsAction } from "../actions/projectsActionCreators";
 
 export const loadProjectsThunk =
   () => async (dispatch: Dispatch<LoadProjectsAction>) => {
-    const apiUrl = process.env.REACT_APP_API_URL as string;
+    const apiUrl = `${process.env.REACT_APP_API_URL}projects`;
     const { data } = await axios.get<{ projects: Project[] }>(apiUrl, {
       headers: {
         authorization: `Bearer ${process.env.REACT_APP_TEMPORARY_JWT}`,

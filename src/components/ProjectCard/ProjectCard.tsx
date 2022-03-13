@@ -109,7 +109,7 @@ const ProjectCard = ({
         const {
           data: { codeSmells, coverage },
         } = await axios.get(
-          `${process.env.REACT_APP_API_URL}sonardata?projectKey=${sonarqubeKey}`,
+          `${process.env.REACT_APP_API_URL}projects/sonardata?projectKey=${sonarqubeKey}`,
           {
             headers: {
               authorization: `Bearer ${process.env.REACT_APP_TEMPORARY_JWT}`,
