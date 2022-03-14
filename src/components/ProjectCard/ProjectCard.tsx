@@ -1,14 +1,16 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaSatelliteDish, FaRedoAlt } from "react-icons/fa";
 import ReactTimeAgo from "react-time-ago";
 import Project from "../../types/project";
 import trelloLogo from "../../img/trello.svg";
+import githubLogo from "../../img/github-icon.svg";
 import { Octokit } from "@octokit/rest";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { deleteProjectThunk } from "../../redux/thunks/projectsThunks";
 import { useNavigate } from "react-router-dom";
+import Loading from "../Loading/Loading";
 
 const StyledArticle = styled.article<{ backgroundColor: string }>`
   background-color: ${(props) => props.backgroundColor};
@@ -33,6 +35,7 @@ const StyledFooter = styled.div`
   justify-content: flex-end;
   a {
     color: inherit;
+    margin-left: 10px;
   }
   a:hover {
     opacity: 0.8;
@@ -82,6 +85,8 @@ const ProjectCard = ({
   const [infoRepoBack, setInfoRepoBack] = useState<any>(null);
   const [infoSonarFront, setInfoSonarFront] = useState<any>(null);
   const [infoSonarBack, setInfoSonarBack] = useState<any>(null);
+
+  const [loadingSonar, setLoadingSonar] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -150,16 +155,60 @@ const ProjectCard = ({
     }
   }, [sonarqubeKey.front]);
 
+  useEffect(() => {
+    if (sonarqubeKey.back) {
+      (async () => {
+        const {
+          data: { codeSmells, coverage },
+        } = await axios.get(
+          `${process.env.REACT_APP_API_URL}projects/sonardata?projectKey=${sonarqubeKey.back}`,
+          {
+            headers: {
+              authorization: `Bearer ${process.env.REACT_APP_TEMPORARY_JWT}`,
+            },
+          }
+        );
+        setInfoSonarBack({ codeSmells: +codeSmells, coverage: +coverage });
+      })();
+    }
+  }, [sonarqubeKey.back]);
+
   const onDelete = (event: SyntheticEvent) => {
     event.preventDefault();
     dispatch(deleteProjectThunk(id, navigate));
+  };
+
+  const onScan = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    setLoadingSonar(true);
+    await axios.post(
+      `${process.env.REACT_APP_API_URL}projects/sonarscanner`,
+      {
+        projectId: id,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${process.env.REACT_APP_TEMPORARY_JWT}`,
+        },
+      }
+    );
+    setLoadingSonar(false);
   };
 
   return (
     <StyledArticle backgroundColor={backgroundColor}>
       <StyledStudent>{student}</StyledStudent>
       <StyledTitle>{name}</StyledTitle>
-      <h4>Front</h4>
+      <h4>
+        Front{" "}
+        <a
+          href={`${process.env.REACT_APP_GIT_REPO_PREFIX}${repo.front}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={githubLogo} alt="GitHub" height="20" />
+        </a>
+      </h4>
       <p>
         Último commit:{" "}
         {infoRepoFront && infoRepoFront.commits && (
@@ -193,7 +242,16 @@ const ProjectCard = ({
           <p>Coverage: {infoSonarFront.coverage}%</p>
         </>
       )}
-      <h4>Back</h4>
+      <h4>
+        Back{" "}
+        <a
+          href={`${process.env.REACT_APP_GIT_REPO_PREFIX}${repo.back}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={githubLogo} alt="GitHub" height="20" />
+        </a>
+      </h4>
       <p>
         Último commit:{" "}
         {infoRepoBack && (
@@ -203,6 +261,12 @@ const ProjectCard = ({
           />
         )}
       </p>
+      {infoSonarBack && (
+        <>
+          <p>Code smells: {infoSonarBack.codeSmells}</p>
+          <p>Coverage: {infoSonarBack.coverage}%</p>
+        </>
+      )}
       <StyledLogo>
         <a href={trello} target="_blank" rel="noreferrer">
           <img src={trelloLogo} alt="Trello" height="20" />
@@ -210,6 +274,16 @@ const ProjectCard = ({
       </StyledLogo>
       <StyledTutor>{tutor.name.charAt(0).toUpperCase()}</StyledTutor>
       <StyledFooter>
+        {loadingSonar ? (
+          <Loading />
+        ) : (
+          <a href="sonarscanner" onClick={onScan}>
+            <FaSatelliteDish />
+          </a>
+        )}
+        <a href="pull">
+          <FaRedoAlt />
+        </a>
         <a href="delete" onClick={onDelete}>
           <FaTrash />
         </a>

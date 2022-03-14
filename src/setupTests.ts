@@ -5,7 +5,7 @@
 import "@testing-library/jest-dom";
 import TimeAgo from "javascript-time-ago";
 import es from "javascript-time-ago/locale/es.json";
-import { server } from "./mocks/server.js";
+import { server } from "./mocks/server";
 
 beforeAll(() => server.listen());
 
