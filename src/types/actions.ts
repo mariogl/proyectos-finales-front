@@ -10,3 +10,11 @@ export interface LoadProjectsAction extends Action {
 export interface FilterProjectsAction extends Action {
   filter: string;
 }
+
+export interface CreateProjectAction extends Action {
+  project: Project;
+}
+
+export interface DeleteProjectAction extends Action {
+  id: string;
+}

@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { randomProject } from "../../mocks/projects";
+import { BrowserRouter } from "react-router-dom";
+import { randomProject } from "../../factories/project";
+import customRender from "../../testUtils";
 import ProjectCard from "./ProjectCard";
 
 describe("Given a ProjectCard component", () => {
@@ -8,7 +10,11 @@ describe("Given a ProjectCard component", () => {
     test("Then it should display its name and student", async () => {
       const project = randomProject();
 
-      render(<ProjectCard project={project} backgroundColor="#000" />);
+      customRender(
+        <BrowserRouter>
+          <ProjectCard project={project} backgroundColor="#000" />
+        </BrowserRouter>
+      );
 
       const name = await screen.findByRole("heading", {
         name: project.name,

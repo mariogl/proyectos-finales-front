@@ -1,4 +1,4 @@
-import { randomProjects } from "../../mocks/projects";
+import { randomProjects } from "../../factories/project";
 import { Action, LoadProjectsAction } from "../../types/actions";
 import Project from "../../types/project";
 import actionTypes from "../actions/actionTypes";

@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import { randomProjects } from "./projects";
+import { randomProjects } from "../factories/project";
 
 export const handlers = [
   rest.get("https://api.github.com/repos/*", (req, res, ctx) => {
@@ -8,7 +8,7 @@ export const handlers = [
       ctx.json([{ commit: { author: { date: "2022-03-10T09:44:15Z" } } }])
     );
   }),
-  rest.get(process.env.REACT_APP_API_URL, (req, res, ctx) =>
+  rest.get(`${process.env.REACT_APP_API_URL}projects`, (req, res, ctx) =>
     res(
       ctx.status(200),
       ctx.json({
@@ -16,13 +16,15 @@ export const handlers = [
       })
     )
   ),
-  rest.get(`${process.env.REACT_APP_API_URL}sonardata`, (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
-        codeSmells: "0",
-        coverage: "0",
-      })
-    )
+  rest.get(
+    `${process.env.REACT_APP_API_URL}projects/sonardata`,
+    (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json({
+          codeSmells: "0",
+          coverage: "0",
+        })
+      )
   ),
 ];
