@@ -1,19 +1,44 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import styled from "styled-components";
+import { FaTrash } from "react-icons/fa";
 import ReactTimeAgo from "react-time-ago";
 import Project from "../../types/project";
 import trelloLogo from "../../img/trello.svg";
 import { Octokit } from "@octokit/rest";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { deleteProjectThunk } from "../../redux/thunks/projectsThunks";
+import { useNavigate } from "react-router-dom";
 
 const StyledArticle = styled.article<{ backgroundColor: string }>`
   background-color: ${(props) => props.backgroundColor};
   color: #fff;
   padding: 10px;
+  padding-bottom: 0;
   font-size: 12px;
   position: relative;
   .danger {
     background-color: red;
+  }
+`;
+
+const StyledFooter = styled.div`
+  background-color: #0002;
+  height: 40px;
+  padding: 0 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  a {
+    color: inherit;
+  }
+  a:hover {
+    opacity: 0.8;
+  }
+  svg {
+    font-size: 20px;
   }
 `;
 
@@ -56,6 +81,10 @@ const ProjectCard = ({
   const [infoRepoFront, setInfoRepoFront] = useState<any>(null);
   const [infoRepoBack, setInfoRepoBack] = useState<any>(null);
   const [infoSonarFront, setInfoSonarFront] = useState<any>(null);
+  const [infoSonarBack, setInfoSonarBack] = useState<any>(null);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -104,12 +133,12 @@ const ProjectCard = ({
   }, [repo.back, repo.front]);
 
   useEffect(() => {
-    if (sonarqubeKey) {
+    if (sonarqubeKey.front) {
       (async () => {
         const {
           data: { codeSmells, coverage },
         } = await axios.get(
-          `${process.env.REACT_APP_API_URL}projects/sonardata?projectKey=${sonarqubeKey}`,
+          `${process.env.REACT_APP_API_URL}projects/sonardata?projectKey=${sonarqubeKey.front}`,
           {
             headers: {
               authorization: `Bearer ${process.env.REACT_APP_TEMPORARY_JWT}`,
@@ -119,7 +148,12 @@ const ProjectCard = ({
         setInfoSonarFront({ codeSmells: +codeSmells, coverage: +coverage });
       })();
     }
-  }, [sonarqubeKey]);
+  }, [sonarqubeKey.front]);
+
+  const onDelete = (event: SyntheticEvent) => {
+    event.preventDefault();
+    dispatch(deleteProjectThunk(id, navigate));
+  };
 
   return (
     <StyledArticle backgroundColor={backgroundColor}>
@@ -175,6 +209,11 @@ const ProjectCard = ({
         </a>
       </StyledLogo>
       <StyledTutor>{tutor.name.charAt(0).toUpperCase()}</StyledTutor>
+      <StyledFooter>
+        <a href="delete" onClick={onDelete}>
+          <FaTrash />
+        </a>
+      </StyledFooter>
     </StyledArticle>
   );
 };

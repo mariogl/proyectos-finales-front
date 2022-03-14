@@ -28,7 +28,6 @@ const ProjectsList = (): JSX.Element => {
   );
 
   const [projects, setProjects] = useState<Project[]>([]);
-
   useEffect(() => {
     setProjects(
       filterBy

@@ -54,19 +54,17 @@ const FormProject = (): JSX.Element => {
     }
   };
 
-  const submitForm = (event: FormEvent) => {
+  const submitForm = async (event: FormEvent) => {
     event.preventDefault();
     if (validateData()) {
-      dispatch(createProjectThunk(formData));
+      await dispatch(createProjectThunk(formData));
       navigate("/projects");
     }
   };
 
   const validateData = (): boolean => {
     return !(
-      Object.values(formData).slice(1).includes("") ||
-      Object.values(formData.repo).includes("") ||
-      formData.tutor.id === ""
+      Object.values(formData).slice(1).includes("") || formData.tutor.id === ""
     );
   };
 
@@ -96,43 +94,21 @@ const FormProject = (): JSX.Element => {
       </Row>
       <Row>
         <Col xs={6}>
-          <Form.Group className="mb-3" controlId="folder">
-            <Form.Label>Carpeta</Form.Label>
+          <Form.Group className="mb-3" controlId="sonarqubeKey.front">
+            <Form.Label>Key SonarQube front</Form.Label>
             <Form.Control
               type="text"
-              value={formData.folder}
+              value={formData.sonarqubeKey.front}
               onChange={changeData}
             />
           </Form.Group>
         </Col>
         <Col xs={6}>
-          <Form.Group className="mb-3" controlId="sonarqubeKey">
-            <Form.Label>Key SonarQube</Form.Label>
+          <Form.Group className="mb-3" controlId="sonarqubeKey.back">
+            <Form.Label>Key SonarQube back</Form.Label>
             <Form.Control
               type="text"
-              value={formData.sonarqubeKey}
-              onChange={changeData}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={6}>
-          <Form.Group className="mb-3" controlId="repo.front">
-            <Form.Label>Repo front</Form.Label>
-            <Form.Control
-              type="url"
-              value={formData.repo.front}
-              onChange={changeData}
-            />
-          </Form.Group>
-        </Col>
-        <Col xs={6}>
-          <Form.Group className="mb-3" controlId="repo.back">
-            <Form.Label>Repo back</Form.Label>
-            <Form.Control
-              type="url"
-              value={formData.repo.back}
+              value={formData.sonarqubeKey.back}
               onChange={changeData}
             />
           </Form.Group>
@@ -166,7 +142,7 @@ const FormProject = (): JSX.Element => {
       <Row>
         <Col xs={12}>
           <Button type="submit" variant="dark" disabled={!validateData()}>
-            Create
+            Crear
           </Button>
         </Col>
       </Row>

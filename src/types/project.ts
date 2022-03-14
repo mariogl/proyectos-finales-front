@@ -1,10 +1,12 @@
 interface Project {
   id: string;
   name: string;
-  folder: string;
   student: string;
   trello: string;
-  sonarqubeKey: string;
+  sonarqubeKey: {
+    front: string;
+    back: string;
+  };
   tutor: {
     id: string;
     name: string;

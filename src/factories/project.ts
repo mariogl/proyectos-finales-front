@@ -10,10 +10,12 @@ const mongoId = () =>
 const getProject = (blank = false) => ({
   id: blank ? "" : mongoId(),
   name: blank ? "" : faker.name.findName(),
-  folder: blank ? "" : faker.name.findName(),
   student: blank ? "" : faker.name.firstName(),
   trello: blank ? "" : faker.internet.url(),
-  sonarqubeKey: blank ? "" : faker.name.firstName(),
+  sonarqubeKey: {
+    front: blank ? "" : faker.name.firstName(),
+    back: blank ? "" : faker.name.firstName(),
+  },
   repo: {
     back: blank ? "" : faker.internet.url(),
     front: blank ? "" : faker.internet.url(),
